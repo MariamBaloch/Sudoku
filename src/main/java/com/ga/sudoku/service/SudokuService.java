@@ -25,22 +25,19 @@ public class SudokuService {
         if (validPuzzle(puzzleNumber)) {
             return "Invalid puzzle number, please input 1,2,3 or 4";
         }
+        StringBuilder returnString = new StringBuilder();
+        returnString.append("Board saved successfully, Please check resources/game/puzzle").append(puzzleNumber).append(".solution.txt\n\n");
 
         int[][] initialBoard = sudoku.createBoard(puzzleNumber);
-        int[][] solvedBoard = sudokuSolver.solve(initialBoard);
-
-        sudoku.saveBoard(solvedBoard, puzzleNumber);
-        return solvedReturn(initialBoard, solvedBoard, puzzleNumber);
-    }
-
-    public String solvedReturn(int[][] initialBoard, int[][] solvedBoard, int puzzleNumber) {
-        StringBuilder returnString = new StringBuilder();
-        returnString.append("Board saved successfully, Please check resources/game/puzzle" + puzzleNumber + ".solution.txt\n\n");
         returnString.append("Initial Board\n");
         returnString.append(sudoku.printAndReturnBoard(initialBoard));
 
+        int[][] solvedBoard = sudokuSolver.solve(initialBoard);
+
         returnString.append("Solved Board\n");
         returnString.append(sudoku.printAndReturnBoard(solvedBoard));
+
+        sudoku.saveBoard(solvedBoard, puzzleNumber);
         return returnString.toString();
     }
 
