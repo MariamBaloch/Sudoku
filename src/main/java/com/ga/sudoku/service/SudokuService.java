@@ -13,19 +13,39 @@ public class SudokuService {
     Sudoku sudoku;
     SudokuSolver sudokuSolver;
 
-    public String saveSudokuBoard(int puzzleNumber) {
-        List<Integer> validPuzzleNumbers = Arrays.asList(1, 2, 3, 4);
-        boolean valid = validPuzzleNumbers.stream().anyMatch(n -> n == puzzleNumber);
-        if (!valid) {
+    public String getSudokuBoard(int puzzleNumber) {
+        if (validPuzzle(puzzleNumber)) {
             return "Invalid puzzle number, please input 1,2,3 or 4";
         }
         int[][] initialBoard = sudoku.createBoard(puzzleNumber);
-        System.out.println("Initial Board");
-        sudoku.printBoard(initialBoard);
+        return sudoku.printAndReturnBoard(initialBoard);
+    }
+
+    public String saveSudokuBoard(int puzzleNumber) {
+        if (validPuzzle(puzzleNumber)) {
+            return "Invalid puzzle number, please input 1,2,3 or 4";
+        }
+
+        int[][] initialBoard = sudoku.createBoard(puzzleNumber);
         int[][] solvedBoard = sudokuSolver.solve(initialBoard);
-        System.out.println("Solved Board");
-        sudoku.printBoard(solvedBoard);
+
         sudoku.saveBoard(solvedBoard, puzzleNumber);
-        return "Board saved successfully, Please check resources/game/puzzle" + puzzleNumber + ".solution.txt and the terminal for the initial and solved boards !";
+        return solvedReturn(initialBoard, solvedBoard, puzzleNumber);
+    }
+
+    public String solvedReturn(int[][] initialBoard, int[][] solvedBoard, int puzzleNumber) {
+        StringBuilder returnString = new StringBuilder();
+        returnString.append("Board saved successfully, Please check resources/game/puzzle" + puzzleNumber + ".solution.txt\n\n");
+        returnString.append("Initial Board\n");
+        returnString.append(sudoku.printAndReturnBoard(initialBoard));
+
+        returnString.append("Solved Board\n");
+        returnString.append(sudoku.printAndReturnBoard(solvedBoard));
+        return returnString.toString();
+    }
+
+    public boolean validPuzzle(int puzzleNumber) {
+        List<Integer> validPuzzleNumbers = Arrays.asList(1, 2, 3, 4);
+        return validPuzzleNumbers.stream().noneMatch(n -> n == puzzleNumber);
     }
 }

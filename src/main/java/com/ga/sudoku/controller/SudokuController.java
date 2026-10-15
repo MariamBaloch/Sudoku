@@ -17,15 +17,23 @@ public class SudokuController {
 
     SudokuService sudokuService;
 
+    @GetMapping("/board/{puzzleNumber}")
+    @Operation(summary = "Returns the original puzzle board", description = "Returns and prints the pre generated board stored in resources/game  in the terminal")
+    public String getSudokuBoard(@PathVariable int puzzleNumber) {
+        try {
+            return sudokuService.getSudokuBoard(puzzleNumber);
+        } catch (SudokuFileNotFoundException | InvalidCharacterException e) {
+            return e.getMessage();
+        }
+    }
+
     @GetMapping("/solve/{puzzleNumber}")
-    @Operation(summary = "Solves a puzzle", description = "Solves the pregenerated puzzle and saves it in resources/game")
+    @Operation(summary = "Solves a puzzle", description = "Solves the pregenerated puzzle, saves it in resources/game and prints it in the terminal")
     public String saveSudokuBoard(@PathVariable int puzzleNumber) {
         try {
             return sudokuService.saveSudokuBoard(puzzleNumber);
-        } catch (SudokuFileNotFoundException | InvalidCharacterException |
-                 NumberFormatException e) {
+        } catch (SudokuFileNotFoundException | InvalidCharacterException e) {
             return e.getMessage();
         }
-
     }
 }

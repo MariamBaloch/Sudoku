@@ -86,22 +86,27 @@ public class Sudoku {
         }
     }
 
-    public void printBoard(int[][] grid) {
-        for (int row = 0; row < 9; row++) {
+    public String printAndReturnBoard(int[][] grid) {
+        StringBuilder sb = new StringBuilder();
 
+        for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
-                System.out.print(grid[row][col] + "  ");
+                sb.append(grid[row][col]).append("  ");
 
                 if (col == 2 || col == 5) {
-                    System.out.print("|  ");
+                    sb.append("|  ");
                 }
             }
-
-            System.out.println(" ");
+            sb.append("\n");
 
             if (row == 2 || row == 5 || row == 8) {
-                System.out.print("----------------------------------\n\n");
+                sb.append("----------------------------------\n\n");
             }
         }
+
+        String formattedBoard = sb.toString();
+        System.out.print(formattedBoard);
+        return formattedBoard;
     }
+
 }
